@@ -17,7 +17,8 @@ const skills = [
   { id: nextId++, name: 'Redux Saga'},
 ];
 const router = new Router();
-let isEven = true;
+
+let timeoutSwitch = true;
 
 router.get('/api/search', async (ctx, next) => {
   if (Math.random() > 0.75) {
@@ -25,13 +26,13 @@ router.get('/api/search', async (ctx, next) => {
     return;
   }
   const { q } = ctx.request.query;
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     setTimeout(() => {
-      const response = skills.filter(o => o.name.toLowerCase().startsWith(q.toLowerCase()));
-      ctx.response.body = response;
+      ctx.response.body = skills.filter(o => o.name.toLowerCase().startsWith(q.toLowerCase()));
       resolve();
-    }, isEven ? 1 * 1000 : 5 * 1000);
-    isEven = !isEven;
+    }, timeoutSwitch ? 1000 : 5 * 1000);
+
+    timeoutSwitch = !timeoutSwitch;
   });
 });
 
